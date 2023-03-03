@@ -105,7 +105,6 @@ if __name__ == '__main__':
     notify.email(env.str("NOTIFICATION_EMAIL"), f"""\
 From: {env.str("NOTIFICATION_SENDER")}
 Subject: Utility Bill Run Completed for {start_of_last_month.strftime('%b %Y')}
-
 Hi there,
 
 Utility bills have been generated and posted to PayHOA. Please verify that bills are accurate before they are published
