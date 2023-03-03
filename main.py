@@ -1,3 +1,5 @@
+import json
+import logging
 from datetime import timedelta, date, datetime
 from typing import Final, Dict, List
 
@@ -8,6 +10,9 @@ from next_century.client import NextCentury
 from pay_hoa.client import PayHOA
 from pay_hoa.shapes import CreateChargeRequest, Charge, LateFee
 from utility_rate import calculate_bill, gallons_to_ccf, AssessedCharge
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 
 def get_start_of_last_month() -> date:
@@ -40,14 +45,19 @@ if __name__ == '__main__':
 
     with env.prefixed("NEXT_CENTURY_"):
         next_century = NextCentury(env.str("EMAIL"), env.str("PASSWORD"))
+        log.info(f"Logged in to Next Century as {env.str('EMAIL')}")
 
     with env.prefixed("PAY_HOA_"):
         pay_hoa = PayHOA(env.str("EMAIL"), env.str("PASSWORD"), env.int("ORGANIZATION_ID"))
+        log.info(f"Logged in to PayHOA as {env.str('EMAIL')} in {env.int('ORGANIZATION_ID')}")
 
     start_of_last_month: Final[date] = get_start_of_last_month()
     start_of_this_month: Final[date] = get_start_of_this_month()
+    log.info(
+        f"Starting Bill Generation for Period {start_of_last_month.strftime('%m/%d/%Y')} - {start_of_this_month.strftime('%m/%d/%Y')}")
 
     usage_by_unit: Dict[str, int] = generate_usage_by_unit(start_of_last_month, start_of_this_month)
+    log.info("Obtained usage by unit")
 
     address_to_pay_hoa_id: Dict[str, int] = {unit["address"]["line1"].split(" ")[0]: unit["id"] for unit in
                                              pay_hoa.list_units()}
@@ -87,8 +97,10 @@ if __name__ == '__main__':
             templates=[],
             invoice_message=f"Bill based on usage between {start_of_last_month.strftime('%m/%d/%Y')} and"
                             f" {start_of_this_month.strftime('%m/%d/%Y')}")
+        log.debug(json.dumps(charge_request.to_dict(), indent=2, sort_keys=True))
 
         pay_hoa.create_charge(charge_request)
+        log.info(f"Invoice created for {unit}")
 
     notify.email(env.str("NOTIFICATION_EMAIL"), f"""\
 From: {env.str("NOTIFICATION_SENDER")}
@@ -103,5 +115,5 @@ View Invoices at https://app.payhoa.com/app/charges/organization/issued
 
 Cheers,
 Auto-Bill""")
-
-
+    log.info("Notification Email Sent")
+    log.info("All Done! 🎉")
