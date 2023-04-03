@@ -1,10 +1,11 @@
 import smtplib
 import ssl
+from email.message import Message
 
 from environs import Env
 
 
-def email(receiver_email: str, message: str):
+def email(message: Message):
     env = Env()
     env.read_env()
 
@@ -14,10 +15,8 @@ def email(receiver_email: str, message: str):
         username = env.str("USERNAME")
         password = env.str("PASSWORD")
 
-    sender = env.str("NOTIFICATION_SENDER")
-
     context = ssl.create_default_context()
     with smtplib.SMTP(server, port) as server:
         server.starttls(context=context)
         server.login(username, password)
-        server.sendmail(sender, receiver_email, message)
+        server.send_message(message)

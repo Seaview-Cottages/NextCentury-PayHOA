@@ -2,6 +2,8 @@ import json
 import logging
 import sys
 from datetime import timedelta, date, datetime
+from email.message import EmailMessage
+from textwrap import dedent
 from typing import Final, Dict, List
 
 from environs import Env
@@ -111,17 +113,22 @@ if __name__ == '__main__':
         pay_hoa.create_charge(charge_request)
         log.info(f"Invoice created for {unit}")
 
-    notify.email(env.str("NOTIFICATION_EMAIL"), f"""\
-From: {env.str("NOTIFICATION_SENDER")}
-Subject: Utility Bill Run Completed for {start_of_last_month.strftime('%b %Y')}
-Hi there,
+    msg = EmailMessage()
+    msg['Subject'] = f"Utility Bill Run Completed for {start_of_last_month.strftime('%b %Y')}"
 
-Utility bills have been generated and posted to PayHOA. Please verify that bills are accurate before they are published
-on {invoice_date.strftime('%m/%d/%Y at %H:%I %p %Z').strip()}.
- 
-View Invoices at https://app.payhoa.com/app/charges/organization/issued
+    msg['From'] = env.str("NOTIFICATION_SENDER")
+    msg['To'] = (env.str("NOTIFICATION_EMAIL"),)
+    msg.set_content(dedent(f"""\
+        Hi there,
+        
+        Utility bills have been generated and posted to PayHOA. Please verify that bills are accurate before they are published
+        on {invoice_date.strftime('%m/%d/%Y at %H:%I %p %Z').strip()}.
+         
+        View Invoices at https://app.payhoa.com/app/charges/organization/issued
+        
+        Cheers,
+        Auto-Bill"""))
 
-Cheers,
-Auto-Bill""")
+    notify.email(msg)
     log.info("Notification Email Sent")
     log.info("All Done! 🎉")
