@@ -134,11 +134,13 @@ class CreateChargeRequest:
     charges: List[Charge]
     templates: List[Any]
     invoice_message: str
+    organization_id: int
 
-    def __init__(self, charges: List[Charge], templates: List[Any], invoice_message: str) -> None:
+    def __init__(self, charges: List[Charge], templates: List[Any], invoice_message: str, organization_id: int) -> None:
         self.charges = charges
         self.templates = templates
         self.invoice_message = invoice_message
+        self.organization_id = organization_id
 
     @staticmethod
     def from_dict(obj: Any) -> 'CreateChargeRequest':
@@ -146,11 +148,12 @@ class CreateChargeRequest:
         charges = from_list(Charge.from_dict, obj.get("charges"))
         templates = from_list(lambda x: x, obj.get("templates"))
         invoice_message = from_str(obj.get("invoiceMessage"))
-        return CreateChargeRequest(charges, templates, invoice_message)
+        organization_id = from_int(obj.get("organizationId"))
+        return CreateChargeRequest(charges, templates, invoice_message, organization_id)
 
-    def to_dict(self, organization_id: int) -> dict:
+    def to_dict(self) -> dict:
         result: dict = {"charges": from_list(lambda x: to_class(Charge, x), self.charges),
                         "templates": from_list(lambda x: x, self.templates),
                         "invoiceMessage": from_str(self.invoice_message),
-                        "organizationId": from_int(organization_id)}
+                        "organizationId": from_int(self.organization_id)}
         return result

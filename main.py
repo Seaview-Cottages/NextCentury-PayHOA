@@ -53,7 +53,10 @@ if __name__ == '__main__':
         log.info(f"Logged in to Next Century as {env.str('EMAIL')}")
 
     with env.prefixed("PAY_HOA_"):
-        pay_hoa = PayHOA(env.str("EMAIL"), env.str("PASSWORD"), env.int("ORGANIZATION_ID"))
+        pay_hao_organization_id = env.int("ORGANIZATION_ID")
+        deposit_bank_account_id = env.int("DEPOSIT_ACCOUNT")
+        category_id = env.int("CATEGORY_ID")
+        pay_hoa = PayHOA(env.str("EMAIL"), env.str("PASSWORD"), pay_hao_organization_id)
         log.info(f"Logged in to PayHOA as {env.str('EMAIL')} in {env.int('ORGANIZATION_ID')}")
 
     start_of_last_month: Final[date] = get_start_of_last_month()
@@ -77,8 +80,8 @@ if __name__ == '__main__':
                                                        metering_period=(start_of_last_month, start_of_this_month))
 
         charge_request = CreateChargeRequest(charges=[Charge(
-            deposit_bank_account_id=33999,
-            category_id=1038205,
+            deposit_bank_account_id=deposit_bank_account_id,
+            category_id=category_id,
             title=c.name,
             description=c.description,
             email_append_message="charge_details",
@@ -101,7 +104,8 @@ if __name__ == '__main__':
         ) for c in charges],
             templates=[],
             invoice_message=f"Bill based on usage between {start_of_last_month.strftime('%m/%d/%Y')} and"
-                            f" {start_of_this_month.strftime('%m/%d/%Y')}")
+                            f" {start_of_this_month.strftime('%m/%d/%Y')}",
+            organization_id=pay_hao_organization_id)
         log.debug(json.dumps(charge_request.to_dict(), indent=2, sort_keys=True))
 
         pay_hoa.create_charge(charge_request)
