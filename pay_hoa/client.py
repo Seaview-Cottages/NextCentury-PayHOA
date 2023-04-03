@@ -43,6 +43,6 @@ class PayHOA:
                           "Accept": "application/json",
                           "X-Legfi-Site-Id": "2",
                           "Origin": "https://app.payhoa.com"
-                      }, json=request.to_dict(self.__organization_id))
+                      }, json=request.to_dict())
 
         response.raise_for_status()

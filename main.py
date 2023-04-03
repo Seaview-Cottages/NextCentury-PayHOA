@@ -15,7 +15,7 @@ from utility_rate import calculate_bill, gallons_to_ccf, AssessedCharge
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 handler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s  [%(levelname)s] %(message)s')
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
