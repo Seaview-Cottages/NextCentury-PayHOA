@@ -1,5 +1,6 @@
 import json
 import logging
+import sys
 from datetime import timedelta, date, datetime
 from typing import Final, Dict, List
 
@@ -11,8 +12,8 @@ from pay_hoa.client import PayHOA
 from pay_hoa.shapes import CreateChargeRequest, Charge, LateFee
 from utility_rate import calculate_bill, gallons_to_ccf, AssessedCharge
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
+log = logging.getLogger()
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 def get_start_of_last_month() -> date:
