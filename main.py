@@ -13,7 +13,11 @@ from pay_hoa.shapes import CreateChargeRequest, Charge, LateFee
 from utility_rate import calculate_bill, gallons_to_ccf, AssessedCharge
 
 log = logging.getLogger()
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+log.setLevel(logging.INFO)
+handler = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+log.addHandler(handler)
 
 
 def get_start_of_last_month() -> date:

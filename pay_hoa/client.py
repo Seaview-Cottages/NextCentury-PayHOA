@@ -34,8 +34,6 @@ class PayHOA:
         return response.json()["data"]
 
     def create_charge(self, request: CreateChargeRequest):
-        request.organization_id = self.__organization_id
-
         response = requests.post(f"{base_url}/charges",
                       params={
                           "queue": True
@@ -45,13 +43,6 @@ class PayHOA:
                           "Accept": "application/json",
                           "X-Legfi-Site-Id": "2",
                           "Origin": "https://app.payhoa.com"
-                      }, json=request.to_dict())
+                      }, json=request.to_dict(self.__organization_id))
 
         response.raise_for_status()
-
-
-if __name__ == '__main__':
-    client = PayHOA("tom@tompaulus.com", "tpf-jac0kmy1wth7UQF", 23133)
-
-    address_to_id = {unit["address"]["line1"].split(" ")[0]: unit["id"] for unit in client.list_units()}
-    print(address_to_id)

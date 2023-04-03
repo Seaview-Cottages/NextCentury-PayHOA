@@ -134,7 +134,6 @@ class CreateChargeRequest:
     charges: List[Charge]
     templates: List[Any]
     invoice_message: str
-    organization_id: int
 
     def __init__(self, charges: List[Charge], templates: List[Any], invoice_message: str) -> None:
         self.charges = charges
@@ -149,9 +148,9 @@ class CreateChargeRequest:
         invoice_message = from_str(obj.get("invoiceMessage"))
         return CreateChargeRequest(charges, templates, invoice_message)
 
-    def to_dict(self) -> dict:
+    def to_dict(self, organization_id: int) -> dict:
         result: dict = {"charges": from_list(lambda x: to_class(Charge, x), self.charges),
                         "templates": from_list(lambda x: x, self.templates),
                         "invoiceMessage": from_str(self.invoice_message),
-                        "organizationId": from_int(self.organization_id)}
+                        "organizationId": from_int(organization_id)}
         return result
