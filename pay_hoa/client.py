@@ -1,4 +1,5 @@
 import json
+import time
 from typing import Final, List
 
 import requests
@@ -46,3 +47,4 @@ class PayHOA:
                       }, json=request.to_dict())
 
         response.raise_for_status()
+        time.sleep(2500)
