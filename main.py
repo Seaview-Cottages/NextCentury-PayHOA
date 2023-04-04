@@ -84,11 +84,11 @@ if __name__ == '__main__':
         charge_request = CreateChargeRequest(charges=[Charge(
             deposit_bank_account_id=deposit_bank_account_id,
             category_id=category_id,
-            title=c.name,
-            description=c.description,
+            title="Utilities",
+            description="\n".join([f"{c.name} ({c.description}) - ${c.amount:.2}" for c in charges]),
             email_append_message="charge_details",
             currency="usd",
-            charge_amount=int(c.amount * 100),
+            charge_amount=int(sum([c.amount for c in charges]) * 100),
             active_after=invoice_date,
             payment_due_on=payment_due,
             late_fees=[
@@ -103,7 +103,7 @@ if __name__ == '__main__':
             email_invoice=1,
             payor_id=address_to_pay_hoa_id[unit],
             payor_type="unit"
-        ) for c in charges],
+        )],
             templates=[],
             invoice_message=f"Bill based on usage between {start_of_last_month.strftime('%m/%d/%Y')} and"
                             f" {start_of_this_month.strftime('%m/%d/%Y')}",

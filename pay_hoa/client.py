@@ -47,4 +47,4 @@ class PayHOA:
                       }, json=request.to_dict())
 
         response.raise_for_status()
-        time.sleep(2500)
+        time.sleep(2.5)
