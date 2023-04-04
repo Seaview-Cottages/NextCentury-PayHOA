@@ -85,7 +85,7 @@ if __name__ == '__main__':
             deposit_bank_account_id=deposit_bank_account_id,
             category_id=category_id,
             title="Utilities",
-            description="\n".join([f"{c.name} ({c.description}) - ${c.amount:.2}" for c in charges]),
+            description="\n".join([f"{c.name} ({c.description}) - ${c.amount:.2f}" for c in charges]),
             email_append_message="charge_details",
             currency="usd",
             charge_amount=int(sum([c.amount for c in charges]) * 100),
