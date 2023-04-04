@@ -56,7 +56,7 @@ class LateFee:
     def to_dict(self) -> dict:
         result: dict = {"lateFeeType": from_str(self.late_fee_type),
                         "oneTimeLateFeeType": from_str(self.one_time_late_fee_type),
-                        "oneTimeLateFeeApplies": self.one_time_late_fee_applies.isoformat(),
+                        "oneTimeLateFeeApplies": self.one_time_late_fee_applies.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
                         "oneTimeLateFeeAmount": from_int(self.one_time_late_fee_amount)}
         return result
 
@@ -120,8 +120,8 @@ class Charge:
                         "emailAppendMessage": from_str(self.email_append_message),
                         "currency": from_str(self.currency),
                         "chargeAmount": from_int(self.charge_amount),
-                        "activeAfter": self.active_after.isoformat(),
-                        "paymentDueOn": self.payment_due_on.isoformat(),
+                        "activeAfter": self.active_after.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+                        "paymentDueOn": self.payment_due_on.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
                         "lateFees": from_list(lambda x: to_class(LateFee, x), self.late_fees),
                         "reason": from_str(self.reason),
                         "emailInvoice": from_int(self.email_invoice),
