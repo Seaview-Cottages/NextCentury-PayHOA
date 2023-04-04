@@ -15,7 +15,7 @@ from pay_hoa.shapes import CreateChargeRequest, Charge, LateFee
 from utility_rate import calculate_bill, gallons_to_ccf, AssessedCharge
 
 log = logging.getLogger()
-log.setLevel(logging.INFO)
+log.setLevel(logging.DEBUG)
 handler = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter('%(asctime)s  [%(levelname)s] %(message)s')
 handler.setFormatter(formatter)
