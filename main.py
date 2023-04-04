@@ -93,7 +93,7 @@ if __name__ == '__main__':
             payment_due_on=payment_due,
             late_fees=[
                 LateFee(
-                    late_fee_type="onetime",
+                    late_fee_type="one-time",
                     one_time_late_fee_type="flat",
                     one_time_late_fee_applies=late_after,
                     one_time_late_fee_amount=1500
