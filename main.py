@@ -122,7 +122,7 @@ if __name__ == '__main__':
         Hi there,
         
         Utility bills have been generated and posted to PayHOA. Please verify that bills are accurate before they are published
-        on {invoice_date.strftime('%m/%d/%Y at %H:%I %p %Z').strip()}.
+        on {invoice_date.strftime('%m/%d/%Y at %I:%M %p %Z').strip()}.
          
         View Invoices at https://app.payhoa.com/app/charges/organization/issued
         
