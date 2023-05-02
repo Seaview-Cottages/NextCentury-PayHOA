@@ -1,3 +1,5 @@
+import json
+import time
 from datetime import date
 from functools import cache
 from typing import Final, List, Optional
@@ -27,16 +29,26 @@ class NextCentury:
         return response.json()[0]["_id"]
 
     def get_daily_read_for_property(self, property_id: str, for_date: date) -> List[dict]:
-        response = requests.get(f"{base_url}/api/Properties/{property_id}/DailyReads/", params={
-            "date": for_date.strftime("%Y-%m-%d")
-        }, headers={
-            "authorization": self.__auth_token,
-            "version": "2",
-        })
+        download_url: Optional[str] = None
+        while download_url is None:
+            prepare_response = requests.get(f"{base_url}/api/Properties/{property_id}/PrepareReadDownload", params={
+                "start": for_date.strftime("%Y-%m-%d")
+            }, headers={
+                "authorization": self.__auth_token,
+                "version": "2",
+            })
 
-        response.raise_for_status()
+            prepare_response.raise_for_status()
+            response_json: dict = prepare_response.json()
+            if response_json.get("state") == "COMPLETE":
+                download_url = response_json.get("url")
+            else:
+                time.sleep(2.5)
 
-        return response.json()
+        report_response = requests.get(download_url)
+        report_response.raise_for_status()
+
+        return [json.loads(p.strip()) for p in report_response.text.strip().split("\n")]
 
     @cache
     def list_units(self, property_id: str):

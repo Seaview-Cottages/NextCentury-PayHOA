@@ -35,12 +35,12 @@ def generate_usage_by_unit(billing_period_start: date, billing_period_end: date)
     property_id: Final[str] = next_century.get_first_property_id()
 
     beginning_read = next_century.get_daily_read_for_property(property_id, billing_period_start)
-    beginning_read_by_unit = {d["unitId"]: d["latestRead"] for d in beginning_read if
-                              d.get("utilityTypeId") == 5}  # 5 is the code for ALL_WATER
+    beginning_read_by_unit = {d["unitId"]: d["meterRead"]["computed"] for d in beginning_read if
+                              d.get("meterRead", {}).get("utilityTypeId") == 5}  # 5 is the code for ALL_WATER
     ending_read = next_century.get_daily_read_for_property(property_id, billing_period_end)
-    ending_read_by_unit = {d["unitId"]: d["latestRead"] for d in ending_read if
-                           d.get("utilityTypeId") == 5}  # 5 is the code for ALL_WATER
-    usage_by_unit_id = {unit: ending_read_by_unit[unit]['usage'] - beginning_read_by_unit[unit]['usage'] for unit in
+    ending_read_by_unit = {d["unitId"]: d["meterRead"]["computed"] for d in ending_read if
+                              d.get("meterRead", {}).get("utilityTypeId") == 5}  # 5 is the code for ALL_WATER
+    usage_by_unit_id = {unit: ending_read_by_unit[unit] - beginning_read_by_unit[unit] for unit in
                         ending_read_by_unit.keys()}
     return {next_century.get_unit(property_id, unit)['name']: usage for unit, usage in
             usage_by_unit_id.items()}
