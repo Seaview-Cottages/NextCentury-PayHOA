@@ -21,9 +21,9 @@ class PayHOA:
         self.__auth_token: Final[str] = login_response.json()["token"]
 
     def list_units(self) -> List[dict]:
-        response = requests.get(f"{base_url}/organizations/{self.__organization_id}/units/list",
+        response = requests.get(f"{base_url}/organizations/{self.__organization_id}/units",
                                 params={
-                                    "page": 1, "search": "", "column": "name", "direction": "asc", "perPage": 50,
+                                    "page": 1, "search": "", "column": "name", "direction": "asc", "perPage": 200,
                                     "tags": "", "withoutTags": ""
                                 },
                                 headers={"Authorization": f"Bearer {self.__auth_token}",
