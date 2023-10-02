@@ -37,12 +37,14 @@ class LateFee:
     one_time_late_fee_type: str
     one_time_late_fee_applies: datetime
     one_time_late_fee_amount: int
+    category_id: int
 
-    def __init__(self, late_fee_type: str, one_time_late_fee_type: str, one_time_late_fee_applies: datetime, one_time_late_fee_amount: int) -> None:
+    def __init__(self, late_fee_type: str, one_time_late_fee_type: str, one_time_late_fee_applies: datetime, one_time_late_fee_amount: int, category_id: int) -> None:
         self.late_fee_type = late_fee_type
         self.one_time_late_fee_type = one_time_late_fee_type
         self.one_time_late_fee_applies = one_time_late_fee_applies
         self.one_time_late_fee_amount = one_time_late_fee_amount
+        self.category_id = category_id
 
     @staticmethod
     def from_dict(obj: Any) -> 'LateFee':
@@ -51,13 +53,15 @@ class LateFee:
         one_time_late_fee_type = from_str(obj.get("oneTimeLateFeeType"))
         one_time_late_fee_applies = from_datetime(obj.get("oneTimeLateFeeApplies"))
         one_time_late_fee_amount = from_int(obj.get("oneTimeLateFeeAmount"))
-        return LateFee(late_fee_type, one_time_late_fee_type, one_time_late_fee_applies, one_time_late_fee_amount)
+        category_id = from_int(obj.get("categoryId"))
+        return LateFee(late_fee_type, one_time_late_fee_type, one_time_late_fee_applies, one_time_late_fee_amount, category_id)
 
     def to_dict(self) -> dict:
         result: dict = {"lateFeeType": from_str(self.late_fee_type),
                         "oneTimeLateFeeType": from_str(self.one_time_late_fee_type),
                         "oneTimeLateFeeApplies": self.one_time_late_fee_applies.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
-                        "oneTimeLateFeeAmount": from_int(self.one_time_late_fee_amount)}
+                        "oneTimeLateFeeAmount": from_int(self.one_time_late_fee_amount),
+                        "categoryId": from_int(self.category_id)}
         return result
 
 

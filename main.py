@@ -96,7 +96,8 @@ if __name__ == '__main__':
                     late_fee_type="one-time",
                     one_time_late_fee_type="flat",
                     one_time_late_fee_applies=late_after,
-                    one_time_late_fee_amount=1500
+                    one_time_late_fee_amount=1500,
+                    category_id=pay_hoa.get_late_fee_category_id()
                 )
             ],
             reason="",

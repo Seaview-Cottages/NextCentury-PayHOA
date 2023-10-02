@@ -1,5 +1,6 @@
 import json
 import time
+from functools import cache
 from typing import Final, List
 
 import requests
@@ -48,3 +49,22 @@ class PayHOA:
 
         response.raise_for_status()
         time.sleep(2.5)
+
+    @cache
+    def get_late_fee_category_id(self):
+        response = requests.get(f"{base_url}/organizations/{self.__organization_id}/categories",
+                                headers={"Authorization": f"Bearer {self.__auth_token}",
+                                         "Accept": "application/json",
+                                         "X-Legfi-Site-Id": "2",
+                                         "Origin": "https://app.payhoa.com"})
+
+        response.raise_for_status()
+
+        flattened_categories = []
+        for cat in response.json():
+            flattened_categories.append(cat)
+            flattened_categories.extend(cat.get("children", []))
+
+        for cat in flattened_categories:
+            if cat["name"] == "Late Fees" and cat["type"] == "income":
+                return cat["id"]
