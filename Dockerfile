@@ -1,4 +1,4 @@
-FROM ubuntu:kinetic
+FROM ubuntu:kinetic-20230624
 
 RUN apt-get update; \
     apt-get install python3 python3-venv libaugeas0 -y; \
