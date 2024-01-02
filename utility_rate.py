@@ -36,24 +36,26 @@ class SeasonalUsageBasedCharge(Charge):
 
     def calculate(self, usage: float, date_range: Tuple[date, date]) -> float:
         Range = namedtuple('Range', ['start', 'end'])
-        today = date.today()
 
         charge: float = 0
 
         for rate_period, season_rate in self.__rate:
-            rp_start = [int(i) for i in rate_period[0].split("/")]
-            rp_end = [int(i) for i in rate_period[1].split("/")]
+            for y in set([d.year for d in date_range]):
+                # When the year rolls over, we need to check both years to ensure there are no gaps.
+                # A better date range algorithm would not have these same issues, but alas, this is the one we have.
+                rp_start = [int(i) for i in rate_period[0].split("/")]
+                rp_end = [int(i) for i in rate_period[1].split("/")]
 
-            rate_range = Range(start=date(today.year, *rp_start), end=date(today.year, *rp_end))
+                rate_range = Range(start=date(y, *rp_start), end=date(y, *rp_end))
 
-            usage_range = Range(*date_range)
-            latest_start = max(usage_range.start, rate_range.start)
-            earliest_end = min(usage_range.end, rate_range.end)
-            delta = (earliest_end - latest_start).days + 1
-            overlap = max(0, delta)
+                usage_range = Range(*date_range)
+                latest_start = max(usage_range.start, rate_range.start)
+                earliest_end = min(usage_range.end, rate_range.end)
+                delta = (earliest_end - latest_start).days + 1
+                overlap = max(0, delta)
 
-            ratio = overlap / ((usage_range.end - usage_range.start).days + 1)
-            charge += usage * season_rate * ratio
+                ratio = overlap / ((usage_range.end - usage_range.start).days + 1)
+                charge += usage * season_rate * ratio
 
         return charge
 
