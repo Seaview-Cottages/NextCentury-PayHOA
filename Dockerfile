@@ -1,4 +1,4 @@
-FROM ubuntu:23.10
+FROM ubuntu:mantic-20240216
 
 RUN apt-get update; \
     apt-get install python3 python3-venv libaugeas0 -y; \
