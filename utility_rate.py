@@ -62,18 +62,18 @@ class SeasonalUsageBasedCharge(Charge):
 
 charge_type = Union[FixedCharge, UsageBasedCharge, SeasonalUsageBasedCharge]
 
-WATER_BASE_CHARGE: Final[charge_type] = FixedCharge("Water Base Charge", 34.4 + 20.15)
+WATER_BASE_CHARGE: Final[charge_type] = FixedCharge("Water Base Charge", 38.55 + 22.60)
 WATER_USAGE_CHARGE: Final[charge_type] = SeasonalUsageBasedCharge("Water Usage", [
-    (("1/1", "5/15"), 5.72),
-    (("5/16", "9/15"), 7.27),
-    (("9/16", "12/31"), 5.72),
+    (("1/1", "5/15"), 5.90),
+    (("5/16", "9/15"), 7.50),
+    (("9/16", "12/31"), 5.90),
 ])
-SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 17.63)
-DUMPSTER_BASE_CHARGE: Final[charge_type] = FixedCharge("Dumpster Base Fee", 31.2)
-GARBAGE_CHARGE: Final[charge_type] = FixedCharge("Garbage", 311)
-YARD_WASTE_CHARGE: Final[charge_type] = FixedCharge("Yard Waste", 13.4)
+SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 18.30)
+DUMPSTER_BASE_CHARGE: Final[charge_type] = FixedCharge("Dumpster Base Fee", 48.25)
+GARBAGE_CHARGE: Final[charge_type] = FixedCharge("Garbage", 337.2)
+YARD_WASTE_CHARGE: Final[charge_type] = FixedCharge("Yard Waste", 13.95)
 RECYCLE_CHARGE: Final[charge_type] = FixedCharge("Recycling", 0)
-SUB_METERING_CHARGE: Final[charge_type] = FixedCharge("Sub-metering", 45)
+SUB_METERING_CHARGE: Final[charge_type] = FixedCharge("Sub-metering", 50)
 
 CHARGES: Final[List[charge_type]] = [
     WATER_BASE_CHARGE,
