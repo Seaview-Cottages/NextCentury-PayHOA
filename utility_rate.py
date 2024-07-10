@@ -62,17 +62,38 @@ class SeasonalUsageBasedCharge(Charge):
 
 charge_type = Union[FixedCharge, UsageBasedCharge, SeasonalUsageBasedCharge]
 
+# Commercial Rate / Inside Seattle, 1x 2" and 1x 1" meters
+# Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/water/commercial-water-rates
 WATER_BASE_CHARGE: Final[charge_type] = FixedCharge("Water Base Charge", 38.55 + 22.60)
+# Commercial Rate / Inside Seattle
+# Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/water/commercial-water-rates
 WATER_USAGE_CHARGE: Final[charge_type] = SeasonalUsageBasedCharge("Water Usage", [
     (("1/1", "5/15"), 5.90),
     (("5/16", "9/15"), 7.50),
     (("9/16", "12/31"), 5.90),
 ])
+
+# Same rate for all
+# Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/sewer
 SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 18.30)
+
+# Residential Account Fee
+# Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/garbage-rates/residential-dumpster-rates
 DUMPSTER_BASE_CHARGE: Final[charge_type] = FixedCharge("Dumpster Base Fee", 48.25)
+
+# Residential Garbage Dumpster - 1.5 yd
+# Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/garbage-rates/residential-dumpster-rates
 GARBAGE_CHARGE: Final[charge_type] = FixedCharge("Garbage", 337.2)
+
+# Multi Family Food & Yard Rate - 96 Gallon
+# Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/food-and-yard-rates/multi-family-rates
 YARD_WASTE_CHARGE: Final[charge_type] = FixedCharge("Yard Waste", 13.95)
+
+# Recycling Rate - No Cost
+# Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/recycling-rates
 RECYCLE_CHARGE: Final[charge_type] = FixedCharge("Recycling", 0)
+
+# Next Century Submetering Rate
 SUB_METERING_CHARGE: Final[charge_type] = FixedCharge("Sub-metering", 50)
 
 CHARGES: Final[List[charge_type]] = [
