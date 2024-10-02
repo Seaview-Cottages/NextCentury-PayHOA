@@ -14,6 +14,8 @@ base_url: Final[str] = "https://core.payhoa.com"
 
 
 class PayHOA:
+    __last_xsrf_token = None
+
     def __init__(self, email: str, password: str, organization_id: int) -> None:
         self.__organization_id: Final[int] = organization_id
         self.__session: Session = requests.sessions.Session()
@@ -37,7 +39,7 @@ class PayHOA:
         login_response = self.__session.post(f"{base_url}/login", json={
             "email": email, "password": password, "siteId": 2
         }, headers={
-            "X-XSRF-TOKEN": unquote(self.__session.cookies.get("XSRF-TOKEN"))
+            "X-XSRF-TOKEN": self.__last_xsrf_token
         })
 
         login_response.raise_for_status()
@@ -50,7 +52,8 @@ class PayHOA:
         cookie = SimpleCookie()
         cookie.load(request.headers.get("Set-Cookie"))
         for k, v in cookie.items():
-            self.__session.cookies.set(k, v.value)
+            if k == "XSRF-TOKEN":
+                self.__last_xsrf_token = unquote(v.value)
 
     def list_units(self) -> List[dict]:
         response = self.__session.get(f"{base_url}/organizations/{self.__organization_id}/units",
@@ -70,7 +73,7 @@ class PayHOA:
                       },
                       json=request.to_dict(),
                       headers={
-                          "X-XSRF-TOKEN": unquote(self.__session.cookies.get("XSRF-TOKEN"))
+                          "X-XSRF-TOKEN": self.__last_xsrf_token
                       })
 
         response.raise_for_status()
