@@ -10,8 +10,7 @@ from requests import Session
 
 from pay_hoa.shapes import CreateChargeRequest
 
-base_url: Final[str] = "http://127.0.0.1:8080"
-# base_url: Final[str] = "https://core.payhoa.com"
+base_url: Final[str] = "https://core.payhoa.com"
 
 
 class PayHOA:
