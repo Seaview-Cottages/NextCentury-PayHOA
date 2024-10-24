@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -54,7 +54,7 @@ jobs:
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@1f36f5b7a2d2f7bfd524795fc966e6d88c37baa9
+        uses: docker/login-action@5d8785b43a795ee002a17dbf1a2235dc1997224b
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
