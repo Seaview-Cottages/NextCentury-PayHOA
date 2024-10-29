@@ -9,4 +9,6 @@ WORKDIR /opt/next-century-pay-hoa/
 COPY . .
 RUN bin/pip3 install -r requirements.txt
 
+USER 1000
+
 ENTRYPOINT ["bin/python3", "main.py"]
