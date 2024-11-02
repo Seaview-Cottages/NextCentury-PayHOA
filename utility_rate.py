@@ -73,7 +73,7 @@ WATER_USAGE_CHARGE: Final[charge_type] = SeasonalUsageBasedCharge("Water Usage",
     (("9/16", "12/31"), 5.90),
 ])
 
-# Same rate for all
+# Same rate all year
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/sewer
 SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 18.30)
 
@@ -81,9 +81,9 @@ SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 18.30)
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/garbage-rates/residential-dumpster-rates
 DUMPSTER_BASE_CHARGE: Final[charge_type] = FixedCharge("Dumpster Base Fee", 48.25)
 
-# Residential Garbage Dumpster - 1.5 yd
+# Residential Garbage Dumpster - 0.75 yd
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/garbage-rates/residential-dumpster-rates
-GARBAGE_CHARGE: Final[charge_type] = FixedCharge("Garbage", 337.2)
+GARBAGE_CHARGE: Final[charge_type] = FixedCharge("Garbage", 246.76)
 
 # Multi Family Food & Yard Rate - 96 Gallon
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/food-and-yard-rates/multi-family-rates
