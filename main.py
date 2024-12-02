@@ -86,7 +86,7 @@ if __name__ == '__main__':
             category_id=category_id,
             title="Utilities",
             description="\n".join([f"{c.name} ({c.description}) - ${c.amount:.2f}" for c in charges]),
-            email_append_message="charge_details",
+            email_append_message="",
             currency="usd",
             charge_amount=int(sum([c.amount for c in charges]) * 100),
             active_after=invoice_date,
@@ -108,6 +108,7 @@ if __name__ == '__main__':
             templates=[],
             invoice_message=f"Bill based on usage between {start_of_last_month.strftime('%m/%d/%Y')} and"
                             f" {start_of_this_month.strftime('%m/%d/%Y')}",
+            payor_type="unit",
             organization_id=pay_hao_organization_id)
         log.debug(json.dumps(charge_request.to_dict(), indent=2, sort_keys=True))
 

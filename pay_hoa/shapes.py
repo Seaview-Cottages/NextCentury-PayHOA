@@ -59,7 +59,7 @@ class LateFee:
     def to_dict(self) -> dict:
         result: dict = {"lateFeeType": from_str(self.late_fee_type),
                         "oneTimeLateFeeType": from_str(self.one_time_late_fee_type),
-                        "oneTimeLateFeeApplies": self.one_time_late_fee_applies.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+                        "oneTimeLateFeeApplies": self.one_time_late_fee_applies.strftime("%Y-%m-%d"),
                         "oneTimeLateFeeAmount": from_int(self.one_time_late_fee_amount),
                         "categoryId": from_int(self.category_id)}
         return result
@@ -124,8 +124,8 @@ class Charge:
                         "emailAppendMessage": from_str(self.email_append_message),
                         "currency": from_str(self.currency),
                         "chargeAmount": from_int(self.charge_amount),
-                        "activeAfter": self.active_after.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
-                        "paymentDueOn": self.payment_due_on.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+                        "activeAfter": self.active_after.strftime("%Y-%m-%d"),
+                        "paymentDueOn": self.payment_due_on.strftime("%Y-%m-%d"),
                         "lateFees": from_list(lambda x: to_class(LateFee, x), self.late_fees),
                         "reason": from_str(self.reason),
                         "emailInvoice": from_int(self.email_invoice),
@@ -138,12 +138,14 @@ class CreateChargeRequest:
     charges: List[Charge]
     templates: List[Any]
     invoice_message: str
+    payor_type: str
     organization_id: int
 
-    def __init__(self, charges: List[Charge], templates: List[Any], invoice_message: str, organization_id: int) -> None:
+    def __init__(self, charges: List[Charge], templates: List[Any], invoice_message: str, payor_type: str, organization_id: int) -> None:
         self.charges = charges
         self.templates = templates
         self.invoice_message = invoice_message
+        self.payor_type = payor_type
         self.organization_id = organization_id
 
     @staticmethod
@@ -152,12 +154,14 @@ class CreateChargeRequest:
         charges = from_list(Charge.from_dict, obj.get("charges"))
         templates = from_list(lambda x: x, obj.get("templates"))
         invoice_message = from_str(obj.get("invoiceMessage"))
+        payor_type = from_str(obj.get("payorType"))
         organization_id = from_int(obj.get("organizationId"))
-        return CreateChargeRequest(charges, templates, invoice_message, organization_id)
+        return CreateChargeRequest(charges, templates, invoice_message, payor_type, organization_id)
 
     def to_dict(self) -> dict:
         result: dict = {"charges": from_list(lambda x: to_class(Charge, x), self.charges),
                         "templates": from_list(lambda x: x, self.templates),
                         "invoiceMessage": from_str(self.invoice_message),
+                        "payorType": from_str(self.payor_type),
                         "organizationId": from_int(self.organization_id)}
         return result
