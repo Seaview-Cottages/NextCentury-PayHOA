@@ -79,15 +79,15 @@ SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 19.21)
 
 # Residential Account Fee
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/garbage-rates/residential-dumpster-rates
-DUMPSTER_BASE_CHARGE: Final[charge_type] = FixedCharge("Dumpster Base Fee", 48.25)
+DUMPSTER_BASE_CHARGE: Final[charge_type] = FixedCharge("Dumpster Base Fee", 49.50)
 
 # Residential Garbage Dumpster - 0.75 yd
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/garbage-rates/residential-dumpster-rates
-GARBAGE_CHARGE: Final[charge_type] = FixedCharge("Garbage", 246.76)
+GARBAGE_CHARGE: Final[charge_type] = FixedCharge("Garbage", 253.14)
 
 # Multi Family Food & Yard Rate - 96 Gallon
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/food-and-yard-rates/multi-family-rates
-YARD_WASTE_CHARGE: Final[charge_type] = FixedCharge("Yard Waste", 13.95)
+YARD_WASTE_CHARGE: Final[charge_type] = FixedCharge("Yard Waste", 14.30)
 
 # Recycling Rate - No Cost
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/recycling-rates
