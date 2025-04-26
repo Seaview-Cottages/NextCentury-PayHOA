@@ -105,7 +105,7 @@ def main():
             organization_id=pay_hao_organization_id)
         log.debug(json.dumps(charge_request.to_dict(), indent=2, sort_keys=True))
 
-        pay_hoa.create_charge(charge_request)
+        # pay_hoa.create_charge(charge_request)  // TODO REVERT
         log.info(f"Invoice created for {unit}")
     msg = EmailMessage()
     msg['Subject'] = f"Utility Bill Run Completed for {start_of_last_month.strftime('%b %Y')}"
@@ -124,10 +124,6 @@ def main():
     notify.email(msg)
     log.info("Notification Email Sent")
     log.info("All Done! 🎉")
-
-
-def lambda_handler(event, context):
-    main()
 
 if __name__ == '__main__':
     main()

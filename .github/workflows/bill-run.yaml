@@ -1,0 +1,50 @@
+name: Monthly Utility Billing
+
+on:
+  schedule:
+    - cron: '0 10 2 * *'  # Run at 10:00 UTC on the 2nd day of each month
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  run-utility-billing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run billing script
+        env:
+          # Timezone
+          TZ: America/Los_Angeles
+
+          # Email configuration
+          SMTP_SERVER: "email-smtp.us-west-2.amazonaws.com"
+          SMTP_PORT: "587"
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          NOTIFICATION_EMAIL: "Seaview Cottages COA - Accounts Receivable <ar@seaviewcottages.org>"
+          NOTIFICATION_SENDER: "Auto-Bill <auto-bill@seaviewcottages.org>"
+
+          # NextCentury
+          NEXT_CENTURY_EMAIL: "ar@seaviewcottages.org"
+          NEXT_CENTURY_PASSWORD: ${{ secrets.NEXT_CENTURY_PASSWORD }}
+
+          # PayHOA
+          PAY_HOA_CATEGORY_ID: "1038205"
+          PAY_HOA_DEPOSIT_ACCOUNT: "38648"
+          PAY_HOA_EMAIL: "ar+autobill@seaviewcottages.org"
+          PAY_HOA_PASSWORD: ${{ secrets.PAY_HOA_PASSWORD }}
+          PAY_HOA_ORGANIZATION_ID: "23133"
+        run: |
+          python main.py
