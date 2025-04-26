@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: Utility Billing Job
 
 Resources:
-  MyLambdaFunction:
+  UtilityBillGenerator:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${AWS::StackName}-function
