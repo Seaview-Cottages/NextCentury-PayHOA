@@ -31,7 +31,7 @@ def get_start_of_this_month() -> date:
     return date.today().replace(day=1)
 
 
-def generate_usage_by_unit(billing_period_start: date, billing_period_end: date):
+def generate_usage_by_unit(next_century: NextCentury, billing_period_start: date, billing_period_end: date):
     property_id: Final[str] = next_century.get_first_property_id()
 
     beginning_read = next_century.get_daily_read_for_property(property_id, billing_period_start)
@@ -46,36 +46,29 @@ def generate_usage_by_unit(billing_period_start: date, billing_period_end: date)
             usage_by_unit_id.items()}
 
 
-if __name__ == '__main__':
+def main():
     env = Env()
     env.read_env()
-
     with env.prefixed("NEXT_CENTURY_"):
         next_century = NextCentury(env.str("EMAIL"), env.str("PASSWORD"))
         log.info(f"Logged in to Next Century as {env.str('EMAIL')}")
-
     with env.prefixed("PAY_HOA_"):
         pay_hao_organization_id = env.int("ORGANIZATION_ID")
         deposit_bank_account_id = env.int("DEPOSIT_ACCOUNT")
         category_id = env.int("CATEGORY_ID")
         pay_hoa = PayHOA(env.str("EMAIL"), env.str("PASSWORD"), pay_hao_organization_id)
         log.info(f"Logged in to PayHOA as {env.str('EMAIL')} in {env.int('ORGANIZATION_ID')}")
-
     start_of_last_month: Final[date] = get_start_of_last_month()
     start_of_this_month: Final[date] = get_start_of_this_month()
     log.info(
         f"Starting Bill Generation for Period {start_of_last_month.strftime('%m/%d/%Y')} - {start_of_this_month.strftime('%m/%d/%Y')}")
-
-    usage_by_unit: Dict[str, int] = generate_usage_by_unit(start_of_last_month, start_of_this_month)
+    usage_by_unit: Dict[str, int] = generate_usage_by_unit(next_century, start_of_last_month, start_of_this_month)
     log.info("Obtained usage by unit")
-
     address_to_pay_hoa_id: Dict[str, int] = {unit["address"]["line1"].split(" ")[0]: unit["id"] for unit in
                                              pay_hoa.list_units()}
-
     invoice_date: datetime = datetime.now() + timedelta(days=1)
     payment_due: datetime = invoice_date.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=31)
     late_after: datetime = payment_due + timedelta(days=15)
-
     for unit, usage in usage_by_unit.items():
         charges: List[AssessedCharge] = calculate_bill(number_of_units=len(usage_by_unit.keys()),
                                                        water_usage=gallons_to_ccf(usage),
@@ -114,10 +107,8 @@ if __name__ == '__main__':
 
         pay_hoa.create_charge(charge_request)
         log.info(f"Invoice created for {unit}")
-
     msg = EmailMessage()
     msg['Subject'] = f"Utility Bill Run Completed for {start_of_last_month.strftime('%b %Y')}"
-
     msg['From'] = env.str("NOTIFICATION_SENDER")
     msg['To'] = (env.str("NOTIFICATION_EMAIL"),)
     msg.set_content(dedent(f"""\
@@ -130,7 +121,13 @@ if __name__ == '__main__':
         
         Cheers,
         Auto-Bill"""))
-
     notify.email(msg)
     log.info("Notification Email Sent")
     log.info("All Done! 🎉")
+
+
+def lambda_handler(event, context):
+    main()
+
+if __name__ == '__main__':
+    main()
