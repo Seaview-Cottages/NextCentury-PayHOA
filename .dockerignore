@@ -1,8 +1,0 @@
-.github
-Dockerfile
-venv
-.gitignore
-renovate.json
-LICENSE
-README
-sample.env
