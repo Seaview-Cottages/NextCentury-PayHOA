@@ -2,7 +2,7 @@ name: Monthly Utility Billing
 
 on:
   schedule:
-    - cron: '0 10 2 * *'  # Run at 10:00 UTC on the 2nd day of each month
+    - cron: '0 0 3 * *'  # Run at 0:00 UTC on the 3nd day of each month
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
