@@ -21,14 +21,18 @@ formatter = logging.Formatter('%(asctime)s  [%(levelname)s] %(message)s')
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
+BILLING_DATE_OVERRIDES: Dict[date, date] = {
+    date(2025,6,1): date(2025,6,2)
+}
+
 
 def get_start_of_last_month() -> date:
     end_of_last_month = date.today().replace(day=1) - timedelta(days=1)
-    return end_of_last_month.replace(day=1)
+    return BILLING_DATE_OVERRIDES.get(end_of_last_month.replace(day=1), end_of_last_month.replace(day=1))
 
 
 def get_start_of_this_month() -> date:
-    return date.today().replace(day=1)
+    return BILLING_DATE_OVERRIDES.get(date.today().replace(day=1), date.today().replace(day=1))
 
 
 def generate_usage_by_unit(next_century: NextCentury, billing_period_start: date, billing_period_end: date):
