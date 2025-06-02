@@ -21,9 +21,7 @@ formatter = logging.Formatter('%(asctime)s  [%(levelname)s] %(message)s')
 handler.setFormatter(formatter)
 log.addHandler(handler)
 
-BILLING_DATE_OVERRIDES: Dict[date, date] = {
-    date(2025,6,1): date(2025,6,2)
-}
+BILLING_DATE_OVERRIDES: Dict[date, date] = {}
 
 
 def get_start_of_last_month() -> date:
