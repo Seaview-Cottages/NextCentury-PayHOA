@@ -82,7 +82,7 @@ class PayHOA:
 
     @cache
     def get_late_fee_category_id(self):
-        response = self.__session.get(f"{base_url}/organizations/{self.__organization_id}/categories")
+        response = self.__session.get(f"{base_url}/accounting/v2/organizations/{self.__organization_id}/categories")
 
         response.raise_for_status()
         self.extract_and_update_cookies(response)
