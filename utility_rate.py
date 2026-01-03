@@ -94,7 +94,7 @@ YARD_WASTE_CHARGE: Final[charge_type] = FixedCharge("Yard Waste", 14.30)
 RECYCLE_CHARGE: Final[charge_type] = FixedCharge("Recycling", 0)
 
 # Next Century Submetering Rate
-SUB_METERING_CHARGE: Final[charge_type] = FixedCharge("Sub-metering", 50)
+SUB_METERING_CHARGE: Final[charge_type] = FixedCharge("Sub-metering", 65)
 
 CHARGES: Final[List[charge_type]] = [
     WATER_BASE_CHARGE,
