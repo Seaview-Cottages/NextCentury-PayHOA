@@ -64,18 +64,18 @@ charge_type = Union[FixedCharge, UsageBasedCharge, SeasonalUsageBasedCharge]
 
 # Commercial Rate / Inside Seattle, 1x 2" and 1x 1" meters
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/water/commercial-water-rates
-WATER_BASE_CHARGE: Final[charge_type] = FixedCharge("Water Base Charge", 41.40 + 24.25)
+WATER_BASE_CHARGE: Final[charge_type] = FixedCharge("Water Base Charge", 44.35 + 26.00)
 # Commercial Rate / Inside Seattle
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/water/commercial-water-rates
 WATER_USAGE_CHARGE: Final[charge_type] = SeasonalUsageBasedCharge("Water Usage", [
-    (("1/1", "5/15"), 5.98),
-    (("5/16", "9/15"), 7.60),
-    (("9/16", "12/31"), 5.98),
+    (("1/1", "5/15"), 6.06),
+    (("5/16", "9/15"), 7.70),
+    (("9/16", "12/31"), 6.06),
 ])
 
 # Same rate all year
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/sewer
-SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 19.21)
+SEWER_CHARGE: Final[charge_type] = UsageBasedCharge("Sewer Usage", 20.18)
 
 # Residential Account Fee
 # Source: https://www.seattle.gov/utilities/your-services/accounts-and-payments/rates/collection-and-disposal/garbage-rates/residential-dumpster-rates
