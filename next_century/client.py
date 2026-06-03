@@ -48,7 +48,20 @@ class NextCentury:
         report_response = requests.get(download_url)
         report_response.raise_for_status()
 
-        return [json.loads(p.strip()) for p in report_response.text.strip().split("\n")]
+        try:
+            report_json = report_response.json()
+        except json.JSONDecodeError:
+            return [json.loads(line) for line in report_response.text.splitlines() if line.strip()]
+
+        if isinstance(report_json, list):
+            return report_json
+
+        if isinstance(report_json, dict):
+            if isinstance(report_json.get("reads"), list):
+                return report_json["reads"]
+            return [report_json]
+
+        raise ValueError(f"Unexpected read download payload type: {type(report_json).__name__}")
 
     @cache
     def list_units(self, property_id: str):
