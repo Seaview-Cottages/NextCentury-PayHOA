@@ -33,13 +33,23 @@ def get_start_of_this_month() -> date:
     return BILLING_DATE_OVERRIDES.get(date.today().replace(day=1), date.today().replace(day=1))
 
 
+def get_required_read_for_date(next_century: NextCentury, property_id: str, target_date: date):
+    reads = next_century.get_daily_read_for_property(property_id, target_date)
+    if reads:
+        return reads
+
+    raise ValueError(
+        f"No NextCentury reads found for required billing date {target_date.strftime('%m/%d/%Y')}"
+    )
+
+
 def generate_usage_by_unit(next_century: NextCentury, billing_period_start: date, billing_period_end: date):
     property_id: Final[str] = next_century.get_first_property_id()
 
-    beginning_read = next_century.get_daily_read_for_property(property_id, billing_period_start)
+    beginning_read = get_required_read_for_date(next_century, property_id, billing_period_start)
     beginning_read_by_unit = {d["unitId"]: d["meterRead"]["computed"] for d in beginning_read if
                               d.get("meterRead", {}).get("utilityTypeId") == 5}  # 5 is the code for ALL_WATER
-    ending_read = next_century.get_daily_read_for_property(property_id, billing_period_end)
+    ending_read = get_required_read_for_date(next_century, property_id, billing_period_end)
     ending_read_by_unit = {d["unitId"]: d["meterRead"]["computed"] for d in ending_read if
                               d.get("meterRead", {}).get("utilityTypeId") == 5}  # 5 is the code for ALL_WATER
     usage_by_unit_id = {unit: ending_read_by_unit[unit] - beginning_read_by_unit[unit] for unit in
