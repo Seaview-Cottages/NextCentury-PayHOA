@@ -23,7 +23,8 @@ class PayHOA:
            "X-Legfi-Site-Id": "2",
            "Origin": "https://app.payhoa.com",
            "Referer": "https://app.payhoa.com",
-           "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15"
+           "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15",
+           "Accept": "application/json, text/plain, */*",
         }
 
         for h, v in default_headers.items():
