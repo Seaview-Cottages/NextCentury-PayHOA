@@ -1,0 +1,30 @@
+name: Keepalive
+
+# Makes a small commit once a month so GitHub doesn't disable scheduled
+# workflows (e.g. bill-run.yaml) after 60 days of repo inactivity.
+
+on:
+  schedule:
+    - cron: '0 12 20 * *'   # 20th of each month, well before the billing run on the 3rd
+  workflow_dispatch:         # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write            # needed to push the keepalive commit
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Update keepalive timestamp
+        run: date -u +"%Y-%m-%dT%H:%M:%SZ" > .keepalive
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .keepalive
+          git commit -m "chore: keepalive"
+          git push
